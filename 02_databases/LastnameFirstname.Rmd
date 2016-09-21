@@ -1,0 +1,42 @@
+---
+title: "HW2: A long time ago in a galaxy far, far away..."
+author: "Ranae Dietzel and Andee Kaplan"
+date: "September 30, 2016"
+output: html_document
+---
+
+## Prompt
+
+
+# Click [here](https://brorlandi.github.io/StarWarsIntroCreator/#!/AKRkWMVWT3uUJXSaN9sg) and turn up the volume!
+
+A long time ago, in a galaxy far, far away....
+
+#### DATA WARS
+
+Episode X  
+Revenge of the RDBS, the SQL
+
+It is a dark time for the Rebellion. Although they have mapped the universe and stored it in a RELATIONAL DATABASE, the Empire has destroyed their only entity-relationship diagram.
+
+A lone analyst works on the rebel base to restore balance to the force and remap the entities and relationships in the model while understanding the structures the designers intended. 
+
+With only two weeks to complete his/her task, he/she queries the database to rediscover the mysteries of the universe...
+
+#### Your mission
+
+1. There is a database in the repo, `data/star_wars.db`. Recreate the missing entity-relationship diagram and include an image of it here. You can use any method you like to draw the ERD (by hand + scan, powerpoint, or https://www.draw.io/).
+2. For each table in the database, what normalized form is it in (if any)? Give some reasoning behind your answers.
+3. Use SQL to answer the following questions and submit your queries.
+    a. What is the most highly populated planet documented in the universe?
+    b. Which planet has the most named characters from the films? What species is native to this planet?
+    c. Who has piloted the most spacecraft (vehicles and starships) in the universe (documented)? What about just vehicles?
+    d. How many people have never piloted a spacecraft according to this data?
+    e. How many spacecraft have no documented pilots? What are their names?
+
+![](images/yoda.jpg)
+
+## Instructions:
+Copy and save a **new copy** of this file, replacing "Lastname" and "Firstname" with your own and leaving the original unedited. *Do not submit your .html files please.*
+
+In **your copy**, replace the `author:` fields in the YAML above, while leaving the remaining fields intact. Remove the Prompt and Instructions sections and complete your homework!
