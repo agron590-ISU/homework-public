@@ -1,0 +1,34 @@
+---
+title: 'HW3: Elektra vs. Catwoman, a.k.a. Gender in Comics'
+author: "Ranae Dietzel and Andee Kaplan"
+date: "October 14, 2016"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Prompt
+
+![](images/DC_Versus_Marvel_1.jpg)
+
+You are going to look into the raw data behind the story [Comic Books Are Still Made By Men, For Men And About Men](http://fivethirtyeight.com/features/women-in-comic-books/). 
+
+The data come from [Marvel Wikia](http://marvel.wikia.com/Main_Page) and [DC Wikia](http://dc.wikia.com/wiki/Main_Page). Characters were scraped on August 24. Appearance counts were scraped on September 2. The month and year of the first issue each character appeared in was pulled on October 6.
+
+The data are split into two files, for DC and Marvel, respectively: `dc-wikia-data.csv` and `marvel-wikia-data.csv` and are in the `data/` folder. A data dictionary is also in the `data` folder describing what each variable in the data mean.
+
+In **teams of two**, explore this data with mostly plots to discover what is going on. Consider (but don't limit yourself to) the questions:
+
+- Is there any pattern around gender in the characters of comics?
+- Is there any change over time?
+- Does the company (DC vs. Marvel) have and effect?
+- What can you say about "good characters" vs. "villains" in regards to their characteristics, gender, the company, over time?
+
+Your homework should be no more than 10 pages once knitted, and should be fully reproducible by the instructors. *Do not submit your .pdf files please.*
+
+Your teams are assigned in the [README](README.md) file in this folder.
+
+## Instructions:
+Copy and save a **new copy** of this file, replacing "Lastname" and "Lastname" with the last names of the two people in your group, leaving the original unedited. 
+
+In **your copy**, replace the `author:` field in the YAML above, while leaving the remaining fields intact. Remove the Prompt and Instructions sections and complete your homework!
