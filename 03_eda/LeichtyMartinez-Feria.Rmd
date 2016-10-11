@@ -1,11 +1,25 @@
 ---
 title: 'HW3: Elektra vs. Catwoman, a.k.a. Gender in Comics'
-author: "Ranae Dietzel and Andee Kaplan"
+author: "Sarah Leichty and Rafael Martinez-Feria"
 date: "October 14, 2016"
 output:
   pdf_document: default
   html_document: default
 ---
+
+## Answers
+
+
+```{r}
+
+# Read data sets
+dc <- read.csv("data/dc-wikia-data.csv", na.strings = "")
+marv <- read.csv("data/marvel-wikia-data.csv", na.strings = "")
+
+str(dc)
+
+```
+
 
 ## Prompt
 
