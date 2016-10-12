@@ -7,15 +7,17 @@ output:
   html_document: default
 ---
 
-## Possible sexist tendencies in comics? Really?
+# Possible sexist tendencies in comics? Really?
 
-Write here some sort of introduction
+##Introduction 
+
+We were given the task of using raw data taken from Marvel Wikia and DC Wikia to determine if any relationships could be found between gender and other character attributes. The following consists of our efforts to clean up the data in order to effectively and accurately form conclusions of what trends are present.   
 
 ```{r datasetup, echo=F, message=F,warning=FALSE}
 require(dplyr)
 require(ggplot2)
 require(reshape2)
-
+#getwd()
 # Read data sets
 dc <- read.csv("data/dc-wikia-data.csv", na.strings = "")
 marv <- read.csv("data/marvel-wikia-data.csv", na.strings = "")
@@ -64,7 +66,7 @@ mycolorscale <- scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#9
 
 ```
 
-#### Is there any pattern around gender in the characters of comics?
+## Is there any pattern around gender in the characters of comics?
 
 ```{r}
 ## figure of total number of characters male vs female
@@ -89,7 +91,7 @@ ggplot(data=apperances[apperances$sex %in% c("Female","Male"),],
   labs(x="Charater type", y="Average apperances", fill="Gender") + 
   mytheme + myfillscale
 ```
-
+When comparing the average number of appearances made by female and male characters in Marvel and DC comics, the trend suggests roughly equal appearances made by each gender. On closer inspection, the number of characters that fit into the male and female categories is quite different with male characters outweighing the females. What this seems to point to is that the fewer female characters tend to average slightly lower than the male appearances and thus are not being represented as often or as widely as the male characters. This trend is consistent across bad, good, and neutral alignments as well. 
 
 - Is there any change over time?
 
@@ -128,6 +130,7 @@ ggplot(data=decades, aes(x=decade, y=char,fill=sex2))+
 
 ```
 
+Over time, the proportion of female to male characters seems to increase, but males still heavily outweigh the proportion of total characters for Marvel and DC comics. As of the most recent decade, females still only made less than one-third of the total characters. 
 
 - Does the company (DC vs. Marvel) have and effect?
 
@@ -148,6 +151,7 @@ knitr::kable(apperances2[c(1,10:12)],caption = "Percent of total number of apper
 
 ```
 
+According to the table produced by the code above, the company (either DC or Marvel) did not appear to have an effect on the percent of female characters compared to males. In both cases, the percent of females and males was within a percent of each other, hovering around 28% and 71.5% for females and males respectively.
 
 - What can you say about "good characters" vs. "villains" in regards to their characteristics, gender, the company, over time?
 
@@ -173,31 +177,7 @@ ggplot(data=melt(decades2, id.vars = c("publisher","align","decade"), measure.va
 
 ```
 
+The graphic depicts both Marvel and DC showing a gradual increase in proportion of total appearances by female characters over the decades since 1930 until 2010. One difference is seen in the neutral character category, with more neutral Marvel female characters in the 1930's than any other alignment during any other decade.Also the proportion of neutral DC female characters was significantly higher during the 1940's and 1950's before decreasing to around 1930's levels during the following decade. Small decadal variations were also seen elsewhere, but exhibited less drastic shifts in proportion of total apearances for female and male characters. 
 
-
-
-## Prompt
-
-![](images/DC_Versus_Marvel_1.jpg)
-
-You are going to look into the raw data behind the story [Comic Books Are Still Made By Men, For Men And About Men](http://fivethirtyeight.com/features/women-in-comic-books/). 
-
-The data come from [Marvel Wikia](http://marvel.wikia.com/Main_Page) and [DC Wikia](http://dc.wikia.com/wiki/Main_Page). Characters were scraped on August 24. Appearance counts were scraped on September 2. The month and year of the first issue each character appeared in was pulled on October 6.
-
-The data are split into two files, for DC and Marvel, respectively: `dc-wikia-data.csv` and `marvel-wikia-data.csv` and are in the `data/` folder. A data dictionary is also in the `data` folder describing what each variable in the data mean.
-
-In **teams of two**, explore this data with mostly plots to discover what is going on. Consider (but don't limit yourself to) the questions:
-
-- Is there any pattern around gender in the characters of comics?
-- Is there any change over time?
-- Does the company (DC vs. Marvel) have and effect?
-- What can you say about "good characters" vs. "villains" in regards to their characteristics, gender, the company, over time?
-
-Your homework should be no more than 10 pages once knitted, and should be fully reproducible by the instructors. *Do not submit your .pdf files please.*
-
-Your teams are assigned in the [README](README.md) file in this folder.
-
-## Instructions:
-Copy and save a **new copy** of this file, replacing "Lastname" and "Lastname" with the last names of the two people in your group, leaving the original unedited. 
-
-In **your copy**, replace the `author:` field in the YAML above, while leaving the remaining fields intact. Remove the Prompt and Instructions sections and complete your homework!
+##Summary
+Overall, DC and Marvel both show trends towards the creation and continued appearance of male characters in all alignment categories. Over time, this gap has lessened a bit, which points to a small increase in female character appearances in terms of first appearance and over time, but the industry still shows a preference for casting males much more often. 
