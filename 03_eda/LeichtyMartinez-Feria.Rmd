@@ -1,0 +1,186 @@
+---
+title: 'HW3: Elektra vs. Catwoman, a.k.a. Gender in Comics'
+author: "Sarah Leichty and Rafael Martinez-Feria"
+date: "October 14, 2016"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Possible sexist tendencies in comics? Really?
+
+## Introduction 
+
+We were given the task of using raw data taken from Marvel Wikia and DC Wikia to determine if any relationships could be found between gender and other character attributes. The following consists of our efforts to clean up the data in order to effectively and accurately form conclusions of what trends are present.   
+
+```{r datasetup, echo=F, message=F,warning=FALSE}
+require(dplyr)
+require(ggplot2)
+require(reshape2)
+#getwd()
+# Read data sets
+dc <- read.csv("data/dc-wikia-data.csv", na.strings = "")
+marv <- read.csv("data/marvel-wikia-data.csv", na.strings = "")
+
+#Check if names are the same
+#names(dc) == names(marv) # not the same names
+
+#Match names with lower case
+names(dc) <- tolower(names(dc))
+names(marv) <- tolower(names(marv))
+
+#all(names(dc) == names(marv)) # now they are all the same!
+
+# Add publisher inf
+dc$publisher <- "DC"
+marv$publisher <- "Marvel"
+
+# Merge datasets
+comics <- rbind(dc,marv)
+
+remove(dc,marv)
+```
+
+```{r cleandata,echo=F, message=F,warning=FALSE}
+### Clean data
+comics$align <- gsub(" Characters", "", comics$align)
+comics$sex <- gsub(" Characters", "", comics$sex)
+comics$alive <- gsub(" Characters", "", comics$alive)
+comics$gsm <- gsub(" Characters", "", comics$gsm)
+comics$eye <- gsub(" Eyes", "", comics$eye)
+comics$hair <- gsub(" Hair", "", comics$hair)
+
+# month of first appreance
+comics$month <-gsub("[^[:alpha:]]","",comics$first.appearance)
+comics$month <- substr(comics$month,start=1,stop=3)
+
+comics$month <- match(comics$month,month.abb)
+
+```
+
+```{r mythemes, echo=F, message=F,warning=FALSE}
+
+mytheme <- theme_linedraw()
+myfillscale <- scale_fill_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00","#ffff33","#a65628"))
+mycolorscale <- scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00","#ffff33","#a65628"))
+
+```
+
+## Is there any pattern around gender in the characters of comics?
+
+```{r patterns, echo=F, message=F,warning=FALSE}
+## figure of total number of characters male vs female
+
+apperances <- 
+  comics %>%
+  group_by(sex, align,publisher) %>%
+  summarise(ave_app = mean(appearances,na.rm=T),
+            total_app = sum(appearances,na.rm=T),
+            char = length(appearances))
+
+#ggplot(data=apperances[apperances$sex %in% c("Female","Male"),], aes(x=align, y=char,fill=sex))+
+#  geom_bar(stat = "identity",position = "dodge",colour="black") + 
+#  labs(x="Charater type", y="Number of characters", fill="Gender") + 
+#  mytheme + myfillscale
+
+ggplot(data=apperances[apperances$sex %in% c("Female","Male"),],
+       aes(x=align))+
+  geom_bar(aes(y=ave_app,fill=sex),stat = "identity",position = "dodge",colour="black") + 
+  facet_grid(publisher~.) +
+  geom_text(aes(y=ave_app+3, group=sex, label = paste0("n=",char)), position = position_dodge(0.9)) + 
+  labs(x="Charater type", y="Average apperances", fill="Gender") + 
+  mytheme + myfillscale
+```
+When comparing the average number of appearances made by female and male characters in Marvel and DC comics, the trend suggests roughly equal appearances made by each gender. On closer inspection, the number of characters that fit into the male and female categories is quite different with male characters outweighing the females. What this seems to point to is that the fewer female characters tend to average slightly lower than the male appearances and thus are not being represented as often or as widely as the male characters. This trend is consistent across bad, good, and neutral alignments as well. 
+
+## Is there any change over time?
+
+
+```{r overtime, echo=F, message=F,warning=FALSE}
+## figure of total number of characters male vs female
+
+comics$decade <- trunc(comics$year/10)*10
+comics$sex2 <- ifelse(comics$sex %in% c("Female","Male", NA), comics$sex, "Other") 
+
+decades <- 
+  comics %>%
+  group_by(sex2,decade) %>%
+  summarise(ave_app = mean(appearances,na.rm=T),
+            total_app = sum(appearances,na.rm=T),
+            char = length(appearances))
+
+decades <- decades[!is.na(decades$sex2),]
+
+
+ggplot(data=decades, aes(x=decade, y=char,fill=sex2))+
+  geom_point(shape=21,size=3) + 
+  geom_line(aes(colour=sex2))+
+  labs(x="", y="Number of characters", fill="Gender", colour="Gender") + 
+  mytheme + myfillscale + mycolorscale + scale_x_continuous(breaks=seq(1930,2010, by=10))
+
+ggplot(data=decades, aes(x=decade, y=ave_app,fill=sex2))+
+  geom_point(shape=21,size=3) + 
+  geom_line(aes(colour=sex2))+
+  labs(x="Decade of first apperance", y="Average apperance by character", fill="Gender",colour="Gender") + 
+  mytheme + myfillscale + mycolorscale + 
+  scale_x_continuous(breaks=seq(1930,2010, by=10)) +
+  scale_y_continuous(limits = c(0,120))
+
+ggplot(data=decades, aes(x=decade, y=char,fill=sex2))+
+  geom_bar(stat = "identity",position = "fill",colour="black") + 
+  labs(x="Decade of first apperance", y="Proportion of total characters", fill="Gender",colour="Gender") + 
+  mytheme + myfillscale + mycolorscale + scale_x_continuous(breaks=seq(1930,2010, by=10))
+
+```
+
+Over time, the proportion of female to male characters seems to increase, but males still heavily outweigh the proportion of total characters for Marvel and DC comics. As of the most recent decade, females still only made less than one-third of the total characters. 
+
+## Does the company (DC vs. Marvel) have and effect?
+
+
+```{r publisher, echo=F, message=F,warning=FALSE}
+apperances2 <- dcast(data=apperances, publisher ~ sex, value.var = "total_app",fun.aggregate = sum)
+
+apperances2[2:7]<- sapply( apperances2[2:7], function(x) return(ifelse(is.na(x),0,x)))
+
+apperances2$tot <- apperances2$Female + apperances2$Male + apperances2$Agender + apperances2$Genderless + apperances2$Genderfluid + apperances2$Transgender
+apperances2$percent_Female <- apperances2$Female/apperances2$tot
+apperances2$percent_Male <- apperances2$Male/apperances2$tot
+apperances2$percent_Other <- (apperances2$Agender + apperances2$Genderless + apperances2$Genderfluid + apperances2$Transgender)/apperances2$tot
+
+apperances2[10:12]<- sapply(apperances2[10:12], function(x) return(round(x*100,1)))
+
+knitr::kable(apperances2[c(1,10:12)],caption = "Percent of total number of apperances by gender")
+
+```
+
+According to the table produced by the code above, the company (either DC or Marvel) did not appear to have an effect on the percent of female characters compared to males. In both cases, the percent of females and males was within a percent of each other, hovering around 28% and 71.5% for females and males respectively.
+
+## What can you say about "good characters" vs. "villains" in regards to their characteristics, gender, the company, over time?
+
+
+```{r all, echo=F, message=F,warning=FALSE}
+
+decades <- 
+  comics %>%
+  group_by(sex2,decade,publisher,align) %>%
+  summarise(total_app = sum(appearances,na.rm=T))
+
+decades2 <- dcast(data=decades[decades$align %in% c("Good","Bad","Neutral"),], publisher + align + decade ~ sex2, value.var = "total_app",fun.aggregate = sum)
+
+decades2 <- decades2[!is.na(decades2$decade),]
+
+ggplot(data=melt(decades2, id.vars = c("publisher","align","decade"), measure.vars = c("Female","Male","Other")),
+       aes(x=as.factor(decade), y=value,fill=variable))+
+  geom_bar(stat = "identity",position = "fill",colour="black") + 
+  facet_grid(publisher~align) +
+  labs(x="First apperance decade", y="Proportion of total apperances", fill="Gender",colour="Gender") +  
+  mytheme + myfillscale + mycolorscale + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+```
+
+The graphic depicts both Marvel and DC showing a gradual increase in proportion of total appearances by female characters over the decades since 1930 until 2010. One difference is seen in the neutral character category, with more neutral Marvel female characters in the 1930's than any other alignment during any other decade.Also the proportion of neutral DC female characters was significantly higher during the 1940's and 1950's before decreasing to around 1930's levels during the following decade. Small decadal variations were also seen elsewhere, but exhibited less drastic shifts in proportion of total apearances for female and male characters. 
+
+## Summary
+Overall, DC and Marvel both show trends towards the creation and continued appearance of male characters in all alignment categories. Over time, this gap has lessened a bit, which points to a small increase in female character appearances in terms of first appearance and over time, but the industry still shows a preference for casting males much more often. 
