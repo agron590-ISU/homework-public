@@ -111,22 +111,25 @@ decades <-
 
 decades <- decades[!is.na(decades$sex2),]
 
+
 ggplot(data=decades, aes(x=decade, y=char,fill=sex2))+
   geom_point(shape=21,size=3) + 
   geom_line(aes(colour=sex2))+
-  labs(x="First apperance decade", y="Number of characters", fill="Gender", colour="Gender") + 
-  mytheme + myfillscale + mycolorscale
+  labs(x="", y="Number of characters", fill="Gender", colour="Gender") + 
+  mytheme + myfillscale + mycolorscale + scale_x_continuous(breaks=seq(1930,2010, by=10))
 
 ggplot(data=decades, aes(x=decade, y=ave_app,fill=sex2))+
   geom_point(shape=21,size=3) + 
   geom_line(aes(colour=sex2))+
-  labs(x="First apperance decade", y="Average apperance by character", fill="Gender",colour="Gender") + 
-  mytheme + myfillscale + mycolorscale
+  labs(x="Decade of first apperance", y="Average apperance by character", fill="Gender",colour="Gender") + 
+  mytheme + myfillscale + mycolorscale + 
+  scale_x_continuous(breaks=seq(1930,2010, by=10)) +
+  scale_y_continuous(limits = c(0,120))
 
 ggplot(data=decades, aes(x=decade, y=char,fill=sex2))+
   geom_bar(stat = "identity",position = "fill",colour="black") + 
-  labs(x="First apperance decade", y="Proportion of total characters", fill="Gender",colour="Gender") + 
-  mytheme + myfillscale + mycolorscale
+  labs(x="Decade of first apperance", y="Proportion of total characters", fill="Gender",colour="Gender") + 
+  mytheme + myfillscale + mycolorscale + scale_x_continuous(breaks=seq(1930,2010, by=10))
 
 ```
 
@@ -171,8 +174,8 @@ ggplot(data=melt(decades2, id.vars = c("publisher","align","decade"), measure.va
        aes(x=as.factor(decade), y=value,fill=variable))+
   geom_bar(stat = "identity",position = "fill",colour="black") + 
   facet_grid(publisher~align) +
-  labs(x="First apperance decade", y="Proportion of total apperances", fill="Gender",colour="Gender") + 
-  mytheme + myfillscale + mycolorscale
+  labs(x="First apperance decade", y="Proportion of total apperances", fill="Gender",colour="Gender") +  
+  mytheme + myfillscale + mycolorscale + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
 ```
